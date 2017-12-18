@@ -149,7 +149,7 @@ public class HelpScreen extends AppCompatActivity implements GoogleApiClient.Con
     public void onLocationChanged(Location location) {
         myLatitude = location.getLatitude();
         myLongtitude = location.getLongitude();
-        lattitudeText.setText(String.valueOf(myLatitude));
+        message.setText("https://www.google.com.tr/maps/place/" + String.valueOf(myLatitude) + "," + String.valueOf(myLongtitude));
 
 
 
