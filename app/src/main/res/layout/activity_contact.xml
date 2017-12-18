@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient"
+    tools:context="com.example.atalante.sos.Contact">
+
+
+
+    <ImageView
+        android:id="@+id/pickContact"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:srcCompat="@drawable/contact"
+        android:layout_above="@+id/contactSaveButton"
+        android:layout_toRightOf="@+id/contactSaveButton"
+        android:layout_toEndOf="@+id/contactSaveButton"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="92dp" />
+
+    <TextView
+        android:id="@+id/firstPhoneText"
+        android:layout_width="200dp"
+        android:layout_height="30dp"
+        android:hint="Choose first phone number"
+        android:background="#11000000"
+        android:layout_alignTop="@+id/pickContact"
+        android:layout_marginTop="25dp"
+        android:layout_toLeftOf="@+id/pickContact"
+        android:layout_toStartOf="@+id/pickContact" />
+
+    <Button
+        android:id="@+id/contactSaveButton"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save Contact"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="155dp" />
+
+</RelativeLayout>

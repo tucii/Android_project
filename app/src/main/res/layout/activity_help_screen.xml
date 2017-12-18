@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient"
+    tools:context="com.example.atalante.sos.HelpScreen">
+
+    <TextView
+        android:id="@+id/shownumber1"
+        android:layout_width="250dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="35dp"
+        android:text=""
+        android:background="#11000000"
+        android:layout_below="@+id/sosButton"
+        android:layout_alignLeft="@+id/sosButton"
+        android:layout_alignStart="@+id/sosButton" />
+
+    <EditText
+        android:id="@+id/message"
+        android:layout_width="250dp"
+        android:layout_height="100dp"
+        android:ems="10"
+        android:text=""
+        android:inputType="textPersonName"
+        android:layout_marginTop="27dp"
+        android:layout_below="@+id/lattitudeText"
+        android:layout_alignLeft="@+id/lattitudeText"
+        android:layout_alignStart="@+id/lattitudeText" />
+
+
+    <ImageButton
+        android:id="@+id/sosButton"
+        android:layout_width="225dp"
+        android:layout_height="210dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="59dp"
+        android:background="@drawable/custom_imagebutton"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/sos_button" />
+
+    <TextView
+        android:id="@+id/lattitudeText"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_alignLeft="@+id/shownumber1"
+        android:layout_alignStart="@+id/shownumber1"
+        android:layout_below="@+id/shownumber1"
+        android:layout_marginTop="23dp" />
+
+    <TextView
+        android:id="@+id/longtitudeText"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_above="@+id/message"
+        android:layout_alignEnd="@+id/shownumber1"
+        android:layout_alignRight="@+id/shownumber1"
+        android:text="" />
+
+
+</RelativeLayout>
