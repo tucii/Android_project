@@ -23,12 +23,12 @@
         android:layout_width="250dp"
         android:layout_height="100dp"
         android:ems="10"
-        android:text=""
+        android:text="Help me!"
         android:inputType="textPersonName"
-        android:layout_marginTop="27dp"
-        android:layout_below="@+id/lattitudeText"
-        android:layout_alignLeft="@+id/lattitudeText"
-        android:layout_alignStart="@+id/lattitudeText" />
+        android:layout_marginTop="31dp"
+        android:layout_below="@+id/shownumber1"
+        android:layout_alignLeft="@+id/shownumber1"
+        android:layout_alignStart="@+id/shownumber1" />
 
 
     <ImageButton
@@ -42,23 +42,9 @@
         android:scaleType="centerCrop"
         app:srcCompat="@drawable/sos_button" />
 
-    <TextView
-        android:id="@+id/lattitudeText"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
-        android:layout_alignLeft="@+id/shownumber1"
-        android:layout_alignStart="@+id/shownumber1"
-        android:layout_below="@+id/shownumber1"
-        android:layout_marginTop="23dp" />
 
-    <TextView
-        android:id="@+id/longtitudeText"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
-        android:layout_above="@+id/message"
-        android:layout_alignEnd="@+id/shownumber1"
-        android:layout_alignRight="@+id/shownumber1"
-        android:text="" />
+
+
 
 
 </RelativeLayout>

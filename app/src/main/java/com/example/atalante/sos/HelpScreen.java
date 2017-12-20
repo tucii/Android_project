@@ -3,6 +3,7 @@ package com.example.atalante.sos;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -27,13 +28,17 @@ public class HelpScreen extends AppCompatActivity implements GoogleApiClient.Con
     private final static int SEND_SMS_PERMISSION_REQUEST_CODE = 111;
     ImageButton sosButton;
     TextView shownumber1;
-    private TextView lattitudeText;
     EditText message;
     private FusedLocationProviderApi locationProvider = LocationServices.FusedLocationApi;
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;
     private  Double myLatitude;
     private  Double myLongtitude;
+    private static final int MY_PERMISSION_REQUEST_FINE_LOCATION = 101;
+    private static final int MY_PERMISSION_REQUEST_COARSE_LOCATION = 102;
+    private boolean permissionIsGranted = false;
+    SharedPrefs sp;
+
 
 
     @Override
@@ -41,19 +46,38 @@ public class HelpScreen extends AppCompatActivity implements GoogleApiClient.Con
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help_screen);
 
+      sp = new SharedPrefs(HelpScreen.this);
+       // sp.setString("lattitude:", "37.422");
+      // sp.setString("longtitude:", "45");
+        String x = sp.getString("lattitude:");
+        String y = sp.getString("longtitude:");
+
+        Toast.makeText(
+                HelpScreen.this,
+                "x:" + x,
+                Toast.LENGTH_SHORT )
+                .show();
+
+
+
+
+
+
+
+
         shownumber1 = (TextView) findViewById(R.id.shownumber1);
         sosButton = (ImageButton) findViewById(R.id.sosButton);
         message = (EditText) findViewById(R.id.message);
-        lattitudeText = (TextView) findViewById(R.id.lattitudeText);
         shownumber1.setText(getIntent().getStringExtra("Phone1"));
         sosButton.setEnabled(false);
         googleApiClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API).addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this).build();
 
         locationRequest = new LocationRequest();
-        locationRequest.setInterval(60 * 1000);
+        locationRequest.setInterval(10 * 1000);
         locationRequest.setFastestInterval(15 * 1000);
-        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        message.setText("Help me, I'm here!!!  https://www.google.com.tr/maps/place/" + (x) + "," + (y));
 
 
 
@@ -64,12 +88,26 @@ public class HelpScreen extends AppCompatActivity implements GoogleApiClient.Con
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, SEND_SMS_PERMISSION_REQUEST_CODE);
 
         }
+
+
+
+
+
+
         sosButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 String phonenumber = shownumber1.getText().toString();
-                message.setText("https://www.google.com.tr/maps/place/" + String.valueOf(myLatitude) + "," + String.valueOf(myLongtitude));
                 String msg = message.getText().toString();
+
+
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSION_REQUEST_FINE_LOCATION);
+                } else {
+                    permissionIsGranted = true;
+                }
 
                 if (!TextUtils.isEmpty(phonenumber) && (!TextUtils.isEmpty(msg))) {
                     if (checkPermission(Manifest.permission.SEND_SMS)) {
@@ -94,7 +132,11 @@ public class HelpScreen extends AppCompatActivity implements GoogleApiClient.Con
 
     }
 
+    private boolean checkPermission(String permission) {
+        int checkPermission = ContextCompat.checkSelfPermission(this, permission);
+        return checkPermission == PackageManager.PERMISSION_GRANTED;
 
+    }
 
     @Override
     public void onConnected(Bundle bundle) {
@@ -111,9 +153,14 @@ public class HelpScreen extends AppCompatActivity implements GoogleApiClient.Con
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
+
+           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSION_REQUEST_FINE_LOCATION);
+            }
             return;
         }
         LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+
     }
 
     @Override
@@ -131,7 +178,9 @@ public class HelpScreen extends AppCompatActivity implements GoogleApiClient.Con
         myLatitude = location.getLatitude();
         myLongtitude = location.getLongitude();
 
-
+        message.setText("Help me, I'm here!!!  https://www.google.com.tr/maps/place/" + String.valueOf(myLatitude) + "," + String.valueOf(myLongtitude));
+        sp.setString("x" , String.valueOf(myLatitude) );
+        sp.setString("y", String.valueOf(myLongtitude));
 
 
     }
@@ -141,43 +190,56 @@ public class HelpScreen extends AppCompatActivity implements GoogleApiClient.Con
         super.onStart();
         googleApiClient.connect();
 
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(googleApiClient.isConnected()){
-            requestLocationUpdates();
+        if (permissionIsGranted) {
+            if (googleApiClient.isConnected()) {
+                requestLocationUpdates();
+            }
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
+        if (permissionIsGranted)
+            LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        googleApiClient.disconnect();
+        if (permissionIsGranted)
+            googleApiClient.disconnect();
     }
 
 
 
-    private boolean checkPermission(String permission) {
-        int checkPermission = ContextCompat.checkSelfPermission(this, permission);
-        return checkPermission == PackageManager.PERMISSION_GRANTED;
-
-    }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode,@NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
+           case MY_PERMISSION_REQUEST_FINE_LOCATION:
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    permissionIsGranted = true;
+            }
+            else {
+                    permissionIsGranted = false;
+                    Toast.makeText(getApplicationContext(), "This app requires location permission to be granted", Toast.LENGTH_SHORT).show();
+                    message.setText("Location permission not granted");
+            }
+
+
             case SEND_SMS_PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0 && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     sosButton.setEnabled(true);
                 }
+
+            case MY_PERMISSION_REQUEST_COARSE_LOCATION:
 
                 break;
         }

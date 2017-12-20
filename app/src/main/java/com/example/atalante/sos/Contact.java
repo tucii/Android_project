@@ -1,6 +1,8 @@
 package com.example.atalante.sos;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
@@ -10,12 +12,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Contact extends AppCompatActivity {
     private static final int REQ_PICK_CONTACT = 2;
     private TextView firstPhoneText;
     ImageView pickContact;
     Button contactSaveButton;
+    SharedPrefs sp;
+    String number1;
+
 
 
     @Override
@@ -27,6 +33,27 @@ public class Contact extends AppCompatActivity {
         contactSaveButton = (Button) findViewById(R.id.contactSaveButton);
         pickContact = (ImageView) findViewById(R.id.pickContact);
 
+
+        sp = new SharedPrefs(Contact.this);
+        //sp.setString("number:", "05357981098");
+        //String asd = firstPhoneText.getText().toString();
+        //sp.setString("number", asd);
+
+
+        String number = sp.getString("number:");
+        firstPhoneText.setText(String.valueOf(number));
+        number1 = firstPhoneText.getText().toString();
+
+       // Toast.makeText(Contact.this , "number" + number , Toast.LENGTH_SHORT).show();
+
+       /* SharedPreferences contactPreferences = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = contactPreferences.edit();
+        editor.putString("contactPhoneNumber", firstPhoneText.getText().toString());
+        editor.commit();
+
+        //String myString = contactPreferences.getString("contactPhoneNumber", "Empty");
+        firstPhoneText.setText(contactPreferences.getString("contactPhoneNumber", "Empty"));
+        */
 
         pickContact.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,13 +85,13 @@ public class Contact extends AppCompatActivity {
 
             public void onClick(View view) {
 
-                firstPhoneText = (TextView) findViewById(R.id.firstPhoneText);
-                String number1 = firstPhoneText.getText().toString();
 
 
                 Intent myIntent = new Intent(view.getContext(),HelpScreen.class);
                 myIntent.putExtra("Phone1",number1);
                 startActivity(myIntent);
+
+
 
               /*  secondPhoneText = (TextView) findViewById(R.id.secondPhoneText);
                 String number2 = secondPhoneText.getText().toString();
@@ -80,8 +107,7 @@ public class Contact extends AppCompatActivity {
         });
     }
 
-    String number1;
-    String number2;
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

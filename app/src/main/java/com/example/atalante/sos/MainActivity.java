@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
             editor.putString("username", usernameInput.getText().toString());
             editor.putString("password", passwordInput.getText().toString());
-            editor.apply();
+            editor.commit();
             Toast.makeText(this, "Login!", Toast.LENGTH_LONG).show();
 
         Intent i = new Intent(MainActivity.this, Contact.class);
